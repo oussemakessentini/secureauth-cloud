@@ -1,11 +1,11 @@
 package com.oussama.secureauthapi.service;
 
-import com.oussama.secureauthapi.dto.AuthResponse;
-import com.oussama.secureauthapi.dto.LoginRequest;
-import com.oussama.secureauthapi.dto.RegisterRequest;
+import com.oussama.secureauthapi.dto.*;
+import com.oussama.secureauthapi.entity.RefreshToken;
 import com.oussama.secureauthapi.entity.Role;
 import com.oussama.secureauthapi.entity.RoleName;
 import com.oussama.secureauthapi.entity.User;
+import com.oussama.secureauthapi.repository.RefreshTokenRepository;
 import com.oussama.secureauthapi.repository.RoleRepository;
 import com.oussama.secureauthapi.repository.UserRepository;
 import com.oussama.secureauthapi.security.JwtService;
@@ -23,6 +23,8 @@ public class AuthService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final RefreshTokenService refreshTokenService;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     public AuthResponse register(RegisterRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
@@ -43,10 +45,13 @@ public class AuthService {
 
         userRepository.save(user);
 
-        String token = jwtService.generateToken(user.getEmail());
+        String accessToken = jwtService.generateToken(user.getEmail());
+        String refreshToken = refreshTokenService.createRefreshToken(user.getEmail()).getToken();
 
         return AuthResponse.builder()
-                .token(token)
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .tokenType("Bearer")
                 .message("User registered successfully")
                 .build();
     }
@@ -60,11 +65,57 @@ public class AuthService {
             throw new RuntimeException("Invalid email or password");
         }
 
-        String token = jwtService.generateToken(user.getEmail());
+        String accessToken = jwtService.generateToken(user.getEmail());
+        String refreshToken = refreshTokenService.createRefreshToken(user.getEmail()).getToken();
 
         return AuthResponse.builder()
-                .token(token)
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .tokenType("Bearer")
                 .message("Login successful")
+                .build();
+    }
+
+    public UserResponse getCurrentUser(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return UserResponse.builder()
+                .id(user.getId())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .enabled(user.isEnabled())
+                .roles(
+                        user.getRoles()
+                                .stream()
+                                .map(role -> role.getName().name())
+                                .collect(java.util.stream.Collectors.toSet())
+                )
+                .build();
+    }
+
+    public AuthResponse refreshToken(RefreshTokenRequest request) {
+        RefreshToken refreshToken = refreshTokenRepository.findByToken(request.getRefreshToken())
+                .orElseThrow(() -> new RuntimeException("Refresh token not found"));
+
+        refreshTokenService.verifyExpiration(refreshToken);
+
+        String accessToken = jwtService.generateToken(refreshToken.getUser().getEmail());
+
+        return AuthResponse.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken.getToken())
+                .tokenType("Bearer")
+                .message("Token refreshed successfully")
+                .build();
+    }
+
+    public AuthResponse logout(LogoutRequest request) {
+        refreshTokenService.deleteByUserEmail(request.getEmail());
+
+        return AuthResponse.builder()
+                .message("Logout successful")
                 .build();
     }
 }
