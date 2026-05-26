@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: secureauth-postgres
+    environment:
+      POSTGRES_DB: secureauth_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - secureauth_postgres_data:/var/lib/postgresql/data
+
+volumes:
+  secureauth_postgres_data:
