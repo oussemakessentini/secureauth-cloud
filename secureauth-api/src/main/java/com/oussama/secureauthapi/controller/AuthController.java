@@ -6,6 +6,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import com.oussama.secureauthapi.dto.ForgotPasswordRequest;
+import com.oussama.secureauthapi.dto.ResetPasswordRequest;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -37,5 +39,33 @@ public class AuthController {
     @PostMapping("/logout")
     public AuthResponse logout(@Valid @RequestBody LogoutRequest request) {
         return authService.logout(request);
+    }
+
+    @PostMapping("/change-password")
+    public AuthResponse changePassword(
+            Authentication authentication,
+            @Valid @RequestBody ChangePasswordRequest request
+    ) {
+        return authService.changePassword(authentication.getName(), request);
+    }
+
+    @PostMapping("/forgot-password")
+    public AuthResponse forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
+        return authService.forgotPassword(request);
+    }
+
+    @PostMapping("/reset-password")
+    public AuthResponse resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
+        return authService.resetPassword(request);
+    }
+
+    @GetMapping("/verify-email/{token}")
+    public AuthResponse verifyEmail(@PathVariable String token) {
+        return authService.verifyEmail(token);
+    }
+
+    @PostMapping("/resend-verification")
+    public AuthResponse resendVerification(@Valid @RequestBody ResendVerificationRequest request) {
+        return authService.resendVerification(request);
     }
 }

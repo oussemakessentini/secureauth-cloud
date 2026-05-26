@@ -1,6 +1,7 @@
 package com.oussama.secureauthapi.controller;
 
 import com.oussama.secureauthapi.dto.UserResponse;
+import com.oussama.secureauthapi.entity.RoleName;
 import com.oussama.secureauthapi.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -25,5 +26,21 @@ public class AdminController {
             @RequestParam boolean enabled
     ) {
         return adminService.updateUserStatus(userId, enabled);
+    }
+
+    @PatchMapping("/users/{userId}/roles/add")
+    public UserResponse addRoleToUser(
+            @PathVariable Long userId,
+            @RequestParam RoleName roleName
+    ) {
+        return adminService.addRoleToUser(userId, roleName);
+    }
+
+    @PatchMapping("/users/{userId}/roles/remove")
+    public UserResponse removeRoleFromUser(
+            @PathVariable Long userId,
+            @RequestParam RoleName roleName
+    ) {
+        return adminService.removeRoleFromUser(userId, roleName);
     }
 }
