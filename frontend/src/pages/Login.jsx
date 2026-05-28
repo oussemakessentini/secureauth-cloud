@@ -35,7 +35,16 @@ function Login() {
       localStorage.setItem("accessToken", response.data.accessToken);
       localStorage.setItem("refreshToken", response.data.refreshToken);
 
+      const userResponse = await api.get("/auth/me");
+      const roles = userResponse.data.roles || [];
+
+      localStorage.setItem("roles", JSON.stringify(roles));
+
+      if (roles.includes("ROLE_ADMIN")) {
+      navigate("/admin/users");
+      } else {
       navigate("/dashboard");
+      }
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");
     } finally {

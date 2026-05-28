@@ -26,6 +26,7 @@ function Dashboard() {
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
+    localStorage.removeItem("roles");
     navigate("/login");
   };
 
