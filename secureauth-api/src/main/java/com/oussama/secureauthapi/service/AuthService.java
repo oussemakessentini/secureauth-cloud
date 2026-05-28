@@ -54,8 +54,9 @@ public class AuthService {
         User savedUser = userRepository.save(user);
 
         EmailVerificationToken verificationToken = createEmailVerificationToken(savedUser);
-        String verificationLink = "http://localhost:8080/api/auth/verify-email?token=" + verificationToken.getToken();
-
+        String verificationLink =
+                "http://localhost:5173/verify-email?token="
+                        + verificationToken.getToken();
         emailService.sendEmail(
                 savedUser.getEmail(),
                 "Verify your SecureAuth account",

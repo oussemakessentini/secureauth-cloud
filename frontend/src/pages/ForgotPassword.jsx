@@ -1,17 +1,12 @@
 import { useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import api from "../api/axiosConfig";
 
-function ResetPassword() {
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
-
-  const [newPassword, setNewPassword] = useState("");
+function ForgotPassword() {
+  const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-
-  const token = searchParams.get("token");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,54 +15,38 @@ function ResetPassword() {
     setLoading(true);
 
     try {
-      const response = await api.post("/auth/reset-password", {
-        token,
-        newPassword,
-      });
-
+      const response = await api.post("/auth/forgot-password", { email });
       setMessage(response.data.message);
-
-      setTimeout(() => {
-        navigate("/login?passwordReset=true");
-      }, 2000);
+      setEmail("");
     } catch (err) {
-      setError(err.response?.data?.message || "Password reset failed");
+      setError(err.response?.data?.message || "Failed to send reset email");
     } finally {
       setLoading(false);
     }
   };
 
-  if (!token) {
-    return (
-      <div className="container mt-5">
-        <div className="alert alert-danger">Reset token is missing.</div>
-      </div>
-    );
-  }
-
   return (
     <div className="container d-flex justify-content-center align-items-center min-vh-100">
       <div className="card shadow p-4" style={{ width: "420px" }}>
-        <h2 className="text-center mb-4">Reset Password</h2>
+        <h2 className="text-center mb-4">Forgot Password</h2>
 
         {message && <div className="alert alert-success">{message}</div>}
         {error && <div className="alert alert-danger">{error}</div>}
 
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
-            <label>New Password</label>
+            <label>Email</label>
             <input
-              type="password"
+              type="email"
               className="form-control"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
-              minLength="8"
             />
           </div>
 
           <button className="btn btn-primary w-100" disabled={loading}>
-            {loading ? "Resetting..." : "Reset Password"}
+            {loading ? "Sending..." : "Send Reset Link"}
           </button>
         </form>
 
@@ -79,4 +58,4 @@ function ResetPassword() {
   );
 }
 
-export default ResetPassword;
+export default ForgotPassword;

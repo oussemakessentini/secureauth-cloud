@@ -64,6 +64,11 @@ public class AuthController {
         return authService.verifyEmail(token);
     }
 
+    @GetMapping("/verify-email")
+    public AuthResponse verifyEmailByQueryParam(@RequestParam String token) {
+        return authService.verifyEmail(token);
+    }
+
     @PostMapping("/resend-verification")
     public AuthResponse resendVerification(@Valid @RequestBody ResendVerificationRequest request) {
         return authService.resendVerification(request);
