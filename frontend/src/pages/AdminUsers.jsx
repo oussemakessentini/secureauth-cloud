@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../api/axiosConfig";
+import Navbar from "../components/Navbar";
 
 function AdminUsers() {
   const [users, setUsers] = useState([]);
@@ -37,6 +38,8 @@ function AdminUsers() {
     };
 
   return (
+    <>
+    <Navbar />
     <div className="container mt-5">
       <h2>Admin - Users</h2>
 
@@ -96,11 +99,19 @@ function AdminUsers() {
                 )}
                 </div>
                 </td>
+                <td>
+                {user.roles?.map((role) => (
+                    <span key={role} className="badge bg-secondary badge-role">
+                    {role}
+                    </span>
+                ))}
+                </td>
             </tr>
           ))}
         </tbody>
       </table>
     </div>
+    </>
   );
 }
 

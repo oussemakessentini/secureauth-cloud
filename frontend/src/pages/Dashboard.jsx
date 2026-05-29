@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axiosConfig";
+import Navbar from "../components/Navbar";
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -23,26 +24,19 @@ function Dashboard() {
     fetchUser();
   }, [navigate]);
 
-  const handleLogout = () => {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-    localStorage.removeItem("roles");
-    navigate("/login");
-  };
 
   return (
+    <>
+    <Navbar />
     <div className="container mt-5">
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2>SecureAuth Dashboard</h2>
-        <button className="btn btn-outline-danger" onClick={handleLogout}>
-          Logout
-        </button>
       </div>
 
       {error && <div className="alert alert-danger">{error}</div>}
 
       {user ? (
-        <div className="card shadow p-4">
+        <div className="card shadow p-4 auth-card">
           <h4>Welcome, {user.firstName} {user.lastName}</h4>
           <p><strong>Email:</strong> {user.email}</p>
           <p><strong>Status:</strong> {user.enabled ? "Enabled" : "Disabled"}</p>
@@ -52,6 +46,7 @@ function Dashboard() {
         <p>Loading...</p>
       )}
     </div>
+    </>
   );
 }
 

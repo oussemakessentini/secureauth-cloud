@@ -40,11 +40,9 @@ function Login() {
 
       localStorage.setItem("roles", JSON.stringify(roles));
 
-      if (roles.includes("ROLE_ADMIN")) {
-      navigate("/admin/users");
-      } else {
+      
       navigate("/dashboard");
-      }
+      
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");
     } finally {
