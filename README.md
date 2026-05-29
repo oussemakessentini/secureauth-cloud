@@ -346,29 +346,29 @@ PATCH   /api/admin/users/{userId}/roles/remove
 
 ## Login Page
 
-![Login Page](screenshots/login.png)
+![Login Page](screenshots/login.PNG)
 
 ---
 
 ## Register Page
 
-![Register Page](screenshots/register.png)
+![Register Page](screenshots/register.PNG)
 
 ---
 
 ## Forgot Password Page
 
-![Forgot Password Page](screenshots/forgot-password.png)
+![Forgot Password Page](screenshots/forgot-password.PNG)
 
 ## Dashboard
 
-![Dashboard](screenshots/dashboard.png)
+![Dashboard](screenshots/dashboard.PNG)
 
 ---
 
 ## Admin User Management
 
-![Admin Users](screenshots/admin-users.png)
+![Admin Users](screenshots/admin-users.PNG)
 
 ---
 
