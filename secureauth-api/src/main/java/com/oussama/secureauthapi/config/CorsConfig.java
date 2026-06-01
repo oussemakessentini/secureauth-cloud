@@ -18,7 +18,8 @@ public class CorsConfig {
         config.setAllowCredentials(true);
 
         config.setAllowedOrigins(List.of(
-                "http://localhost:5173"
+                "http://localhost:5173",
+                "https://d2qjp6t40zpdom.cloudfront.net"
         ));
 
         config.setAllowedHeaders(List.of(
