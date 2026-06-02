@@ -1,0 +1,37 @@
+name: Deploy Backend to EC2
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "secureauth-api/**"
+      - ".github/workflows/deploy-backend.yml"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy backend on EC2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd /home/ec2-user/secureauth-cloud/secureauth-api
+            git pull origin main
+
+            docker stop secureauth-api || true
+            docker rm secureauth-api || true
+
+            docker build -t secureauth-api .
+
+            docker run -d \
+              --name secureauth-api \
+              --env-file /home/ec2-user/.env \
+              -p 8080:8080 \
+              secureauth-api
+
+            docker image prune -f
