@@ -4,7 +4,62 @@ Enterprise-grade authentication and authorization platform built with Spring Boo
 
 SecureAuth Cloud demonstrates real-world backend and frontend engineering practices including JWT authentication, refresh token management, email verification, password reset flows, role-based access control (RBAC), admin management, protected frontend routing, and production-ready deployment preparation.
 
+
+![AWS](https://img.shields.io/badge/AWS-Deployed-orange)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.5-green)
+![React](https://img.shields.io/badge/React-19-blue)
+![Docker](https://img.shields.io/badge/Docker-Containerized-blue)
+![CI/CD](https://img.shields.io/badge/CI/CD-GitHub_Actions-success)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-RDS-blue)
+
 ---
+
+# Live Demo
+
+### Frontend
+
+https://d2qjp6t40zpdom.cloudfront.net
+
+### Backend API
+
+https://api.oussamaksantini.com
+
+### Swagger Documentation
+
+https://api.oussamaksantini.com/swagger-ui/index.html
+
+### Health Check
+
+https://api.oussamaksantini.com/actuator/health
+
+---
+
+
+
+# Screenshots
+
+## Login Page
+
+![Login Page](screenshots/login.PNG)
+
+---
+
+## Register Page
+
+![Register Page](screenshots/register.PNG)
+
+---
+
+## Forgot Password Page
+
+![Forgot Password Page](screenshots/forgot-password.PNG)
+
+## Dashboard
+
+![Dashboard](screenshots/dashboard.PNG)
+
+---
+
 
 # Features
 
@@ -12,14 +67,14 @@ SecureAuth Cloud demonstrates real-world backend and frontend engineering practi
 
 - User Registration
 - User Login
-- JWT Access Tokens
-- Refresh Token Authentication
+- JWT Authentication
+- Refresh Tokens
 - Automatic Access Token Refresh
 - Email Verification
 - Forgot Password
 - Reset Password
 - Change Password
-- Logout Functionality
+- Logout
 - BCrypt Password Encryption
 - Spring Security Integration
 
@@ -32,40 +87,46 @@ SecureAuth Cloud demonstrates real-world backend and frontend engineering practi
 - ADMIN Role
 - Protected API Endpoints
 - Protected Frontend Routes
-- Admin-Only Pages
+- Admin-Only Features
 
 ---
 
 ## Admin Features
 
 - View All Users
-- Enable / Disable Users
+- Enable / Disable Accounts
 - Promote Users to Admin
 - Remove Admin Role
-- User Status Management
+- User Management Dashboard
 
 ---
 
 ## Frontend Features
 
-- React + Vite Frontend
+- React + Vite
+- Responsive UI
+- Bootstrap Styling
 - Protected Routes
 - Admin Routes
-- Axios JWT Interceptors
-- Automatic Token Refresh
-- Responsive Bootstrap UI
-- Email Verification Page
-- Password Reset Page
+- Axios Interceptors
+- Token Refresh Handling
+- Email Verification Screen
+- Password Reset Screen
 
 ---
 
 ## DevOps & Cloud
 
-- Docker Support
-- Docker Compose
-- Environment Variables
-- AWS-Ready Architecture
-- PostgreSQL Integration
+- Dockerized Backend
+- AWS EC2 Deployment
+- AWS RDS PostgreSQL
+- AWS S3 Static Website Hosting
+- AWS CloudFront CDN
+- HTTPS SSL Certificate
+- Custom Domain Configuration
+- Nginx Reverse Proxy
+- GitHub Actions CI/CD
+- Spring Boot Actuator Monitoring
 
 ---
 
@@ -79,7 +140,7 @@ SecureAuth Cloud demonstrates real-world backend and frontend engineering practi
 - Spring Data JPA
 - Hibernate
 - PostgreSQL
-- JWT (jjwt)
+- JWT
 - Maven
 - Lombok
 
@@ -95,27 +156,73 @@ SecureAuth Cloud demonstrates real-world backend and frontend engineering practi
 
 ---
 
-## DevOps / Cloud
+## Cloud & DevOps
 
+- AWS EC2
+- AWS RDS PostgreSQL
+- AWS S3
+- AWS CloudFront
+- AWS Certificate Manager (ACM)
+- Nginx
 - Docker
-- Docker Compose
-- AWS (planned deployment)
+- GitHub Actions
 
 ---
 
-# Architecture
+# System Architecture
 
 ```text
-Frontend (React + Vite)
-        |
-        v
-Spring Boot REST API
-        |
-        v
-Spring Security + JWT
-        |
-        v
-PostgreSQL Database
+Users
+   │
+   ▼
+CloudFront CDN
+   │
+   ▼
+AWS S3
+(React Frontend)
+   │
+   ▼
+HTTPS API Requests
+   │
+   ▼
+api.oussamaksantini.com
+   │
+   ▼
+Nginx Reverse Proxy
+   │
+   ▼
+Docker Container
+(Spring Boot API)
+   │
+   ▼
+AWS RDS PostgreSQL
+```
+
+---
+
+# CI/CD Architecture
+
+```text
+GitHub Push
+      │
+      ▼
+GitHub Actions
+      │
+      ├─────────────► Frontend
+      │                 │
+      │                 ▼
+      │             AWS S3
+      │                 │
+      │                 ▼
+      │            CloudFront
+      │
+      └─────────────► Backend
+                        │
+                        ▼
+                    AWS EC2
+                        │
+                        ▼
+                     Docker
 ```
 
 ---
@@ -141,7 +248,7 @@ PostgreSQL Database
    - Refresh Token
 3. Frontend stores tokens
 4. Protected APIs require JWT
-5. Expired access tokens refresh automatically
+5. Expired access tokens automatically refresh
 
 ---
 
@@ -149,7 +256,7 @@ PostgreSQL Database
 
 1. User requests password reset
 2. Reset token generated
-3. Email sent to user
+3. Email sent
 4. User opens reset link
 5. Password updated securely
 
@@ -159,19 +266,23 @@ PostgreSQL Database
 
 ```text
 secureauth-cloud/
-│
-├── backend/
+
+├── secureauth-api/
 │   ├── src/
 │   ├── Dockerfile
 │   ├── pom.xml
 │   └── application.properties
 │
-├── frontend/
+├── secureauth-ui/
 │   ├── src/
+│   ├── public/
 │   ├── package.json
 │   └── vite.config.js
 │
-├── docker-compose.yml
+├── .github/
+│   └── workflows/
+│       ├── backend-deploy.yml
+│       └── frontend-deploy.yml
 │
 └── README.md
 ```
@@ -183,7 +294,7 @@ secureauth-cloud/
 ## Clone Repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/secureauth-cloud.git
+git clone https://github.com/oussemakessentini/secureauth-cloud.git
 ```
 
 ---
@@ -191,21 +302,19 @@ git clone https://github.com/YOUR_USERNAME/secureauth-cloud.git
 ## Navigate to Backend
 
 ```bash
-cd backend
+cd secureauth-api
 ```
 
 ---
 
 ## Configure Environment Variables
 
-Create environment variables:
-
 ```env
-DB_URL=jdbc:postgresql://localhost:5433/secureauth_db
+DB_URL=jdbc:postgresql://localhost:5432/secureauth_db
 DB_USERNAME=postgres
 DB_PASSWORD=postgres
 
-JWT_SECRET=your-super-secret-key-minimum-32-characters
+JWT_SECRET=your-secret-key
 
 MAIL_USERNAME=your_email@gmail.com
 MAIL_PASSWORD=your_app_password
@@ -216,27 +325,38 @@ ADMIN_PASSWORD=Admin12345
 
 ---
 
-## Run PostgreSQL with Docker
-
-From project root:
+## Build Application
 
 ```bash
-docker compose up -d
+mvn clean package
 ```
 
 ---
 
-## Run Backend
+## Run Application
 
 ```bash
-mvn clean install
 mvn spring-boot:run
 ```
 
-Backend runs on:
+---
 
-```text
-http://localhost:8080
+# Docker Deployment
+
+## Build Docker Image
+
+```bash
+docker build -t secureauth-api .
+```
+
+## Run Container
+
+```bash
+docker run -d \
+  --name secureauth-api \
+  -p 8080:8080 \
+  --env-file .env \
+  secureauth-api
 ```
 
 ---
@@ -246,10 +366,8 @@ http://localhost:8080
 ## Navigate to Frontend
 
 ```bash
-cd frontend
+cd secureauth-ui
 ```
-
----
 
 ## Install Dependencies
 
@@ -257,33 +375,44 @@ cd frontend
 npm install
 ```
 
----
-
-## Run Frontend
+## Run Development Server
 
 ```bash
 npm run dev
-```
-
-Frontend runs on:
-
-```text
-http://localhost:5173
 ```
 
 ---
 
 # Swagger Documentation
 
-Open Swagger UI:
-
 ```text
-http://localhost:8080/swagger-ui/index.html
+https://api.oussamaksantini.com/swagger-ui/index.html
 ```
 
 ---
 
-# Main API Endpoints
+# Monitoring
+
+## Spring Boot Actuator
+
+Health Endpoint
+
+```text
+https://api.oussamaksantini.com/actuator/health
+```
+
+Useful Endpoints:
+
+```text
+/actuator/health
+/actuator/info
+/actuator/metrics
+/actuator/env
+```
+
+---
+
+# API Endpoints
 
 ## Authentication
 
@@ -320,9 +449,9 @@ POST   /api/auth/reset-password
 
 ```text
 GET     /api/admin/users
-PATCH   /api/admin/users/{userId}/status
-PATCH   /api/admin/users/{userId}/roles/add
-PATCH   /api/admin/users/{userId}/roles/remove
+PATCH   /api/admin/users/{id}/status
+PATCH   /api/admin/users/{id}/roles/add
+PATCH   /api/admin/users/{id}/roles/remove
 ```
 
 ---
@@ -337,99 +466,60 @@ PATCH   /api/admin/users/{userId}/roles/remove
 - Protected Frontend Routes
 - Email Verification
 - Password Reset Tokens
-- Admin Authorization
 - CORS Configuration
+- HTTPS Enforcement
+- Nginx Reverse Proxy
 
 ---
 
-# Screenshots
+# Key Achievements
 
-## Login Page
-
-![Login Page](screenshots/login.PNG)
-
----
-
-## Register Page
-
-![Register Page](screenshots/register.PNG)
-
----
-
-## Forgot Password Page
-
-![Forgot Password Page](screenshots/forgot-password.PNG)
-
-## Dashboard
-
-![Dashboard](screenshots/dashboard.PNG)
-
----
-
-## Admin User Management
-
-![Admin Users](screenshots/admin-users.PNG)
-
----
-
-# Docker Support
-
-## Start Database
-
-```bash
-docker compose up -d
-```
-
----
-
-## Build Backend Docker Image
-
-```bash
-docker build -t secureauth-api .
-```
+- Designed and developed a full-stack authentication platform.
+- Implemented JWT authentication and refresh token workflow.
+- Built secure password reset and email verification functionality.
+- Containerized backend using Docker.
+- Deployed production infrastructure on AWS.
+- Configured HTTPS with custom domain.
+- Automated frontend and backend deployments using GitHub Actions.
+- Integrated application health monitoring with Spring Boot Actuator.
 
 ---
 
 # Future Improvements
 
-- AWS Deployment
-- CI/CD Pipeline
-- Kubernetes Deployment
-- Redis Caching
 - OAuth2 Login
 - Google Authentication
-- Rate Limiting
+- GitHub Authentication
 - Multi-Factor Authentication (MFA)
-- Audit Logs
+- Redis Caching
+- Rate Limiting
+- Audit Logging
 - User Activity Tracking
-- Email Templates
-- Mobile App Support
-
----
-
-# AWS Deployment Plan
-
-Planned AWS services:
-
-- EC2
-- RDS PostgreSQL
-- S3
-- CloudFront
-- Route53
-- AWS SES
-- Docker Deployment
-- GitHub Actions CI/CD
+- Kubernetes Deployment
+- Prometheus Monitoring
+- Grafana Dashboards
 
 ---
 
 # Author
 
-Oussama Ksantini
+## Oussama Ksantini
 
-Software Engineer | Full Stack Developer | Cloud Enthusiast
+Software Engineer  
+Full Stack Developer  
+Cloud & DevOps Enthusiast
+
+Portfolio:
+https://oussamaksantini.com
+
+LinkedIn:
+https://www.linkedin.com/in/oussama-ksantini
+
+GitHub:
+https://github.com/oussemakessentini
 
 ---
 
 # License
 
-This project is for educational and portfolio purposes.
+This project is intended for educational, learning, and portfolio purposes.
